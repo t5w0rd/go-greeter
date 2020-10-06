@@ -65,10 +65,14 @@ func BenchmarkRedisSet(b *testing.B) {
 	})
 	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	buf := make([]byte, 10)
+	b.ResetTimer()
+	b.StopTimer()
 	for i := 0; i < b.N; i++ {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		rand.Read(buf)
+		b.StartTimer()
 		res := cli.Set(ctx, string(buf), buf, -1)
+		b.StopTimer()
 		cancel()
 		if res.Err() != nil {
 			b.Error(res.Err())
