@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func BenchmarkServer(b *testing.B) {
+ func BenchmarkServer(b *testing.B) {
 	conn, err := grpc.Dial("127.0.0.1:50000", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		b.Fatalf("did not connect: %v", err)
@@ -18,10 +18,16 @@ func BenchmarkServer(b *testing.B) {
 	const name = "t5w0rd"
 	const assertRsp = "Hello t5w0rd"
 
+	b.ResetTimer()
+	b.StopTimer()
 	for i := 0; i < b.N; i++ {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
+
+		b.StartTimer()
 		r, err := c.Call(ctx, &greeter.Request{Name: name})
+		b.StopTimer()
+
 		if err != nil {
 			b.Fatalf("could not greet: %v", err)
 		}

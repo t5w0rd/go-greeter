@@ -1,24 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"github.com/micro/go-micro/v2"
 	log "github.com/micro/go-micro/v2/logger"
 	"greeter-micro/handler"
-	"greeter-micro/subscriber"
-	"os"
-
 	greeter "greeter-micro/proto/greeter"
+	"greeter-micro/subscriber"
 )
 
-func c() (i int) {
-	defer func() { i++ }()
-	return 1
-}
-
 func main() {
-	fmt.Print(c())
-	os.Exit(0)
 	// New Service
 	service := micro.NewService(
 		micro.Name("com.tutils.service.greeter"),

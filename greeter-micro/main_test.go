@@ -13,10 +13,16 @@ func BenchmarkServer(b *testing.B) {
 	const name = "t5w0rd"
 	const assertRsp = "Hello t5w0rd"
 
+	b.ResetTimer()
+	b.StopTimer()
 	for i := 0; i < b.N; i++ {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
+
+		b.StartTimer()
 		r, err := c.Call(ctx, &greeter.Request{Name: name})
+		b.StopTimer()
+
 		if err != nil {
 			b.Fatalf("could not greet: %v", err)
 		}
